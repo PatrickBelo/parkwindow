@@ -13,7 +13,7 @@ from enum import Enum
 
 class Facility(str, Enum):
     GARAGE_1 = "garage_1"
-    GARAGE_3 = "garage_3"
+    GARAGE_2 = "garage_2"
 
 
 class Permit(str, Enum):

@@ -13,7 +13,7 @@ ParkWindow is a layered client-server application with a nightly Data Intelligen
 | C5 | Permit rule engine | `services/permits.py` | Filters facilities by permit color and time of day |
 | C6 | Explanation service | `services/explanation.py` | LLM phrasing, claim check, template fallback |
 | C7 | Feedback service | `services/feedback.py` | Stores one arrival outcome per recommendation |
-| C8 | Ingestion job | `pipeline/ingestion.py` | Loads occupancy through the adapter and the class schedule; rejects bad rows |
+| C8 | Ingestion job | `pipeline/ingestion.py`, `pipeline/sources.py`, `pipeline/quality.py` | Loads occupancy through the adapter and the class schedule; rejects bad rows; flags stuck counters |
 | C9 | Forecast job | `pipeline/forecast.py` | Slot probabilities, confidence, turnover flags; saves a Draft model |
 | C10 | Accuracy monitor | `pipeline/accuracy.py` | Weekly accuracy; restricts models below 80% |
 | C11 | Database | `db.py` | SQLite storage and audit log |

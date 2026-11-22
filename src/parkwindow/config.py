@@ -34,6 +34,69 @@ MAX_EXPLANATION_SENTENCES = 2     # FR-08
 # Permit rules (FR-07)
 RED_LOTS_OPEN_AFTER = time(18, 0)
 
+# --- Data quality (FR-13) ------------------------------------------------------
+# On 2026-11-18 the FAU Parking app showed Garage 1 at exactly 879 available
+# for 41 minutes during the weekday peak while Garage 2 kept changing.
+# A run this long with no change is treated as a stuck counter.
+STUCK_MIN_READINGS = 3
+STUCK_MIN_SPAN_MINUTES = 30
+PEAK_START = time(8, 0)
+PEAK_END = time(14, 0)
+
+
+# --- Facilities ------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class FacilityProfile:
+    """Shape of a weekday occupancy curve, used by the synthetic generator.
+
+    Fractions are of capacity. Every value is an assumption, cited below,
+    to be re-tuned as more hand-logged mornings come in (A-2, A-4).
+    """
+
+    capacity: int
+    early_fill: float        # fraction occupied at DAY_START
+    peak_fill: float         # fraction occupied at the late-morning plateau
+    peak_reached: time       # when the plateau is reached
+    afternoon_fill: float    # fraction occupied at DAY_END
+    dismissal_release: float # fraction of capacity freed by a class change
+    noise: float             # random variation, fraction of capacity
+
+
+FACILITY_PROFILES = {
+    # Capacity from the FAU Parking app ("662 of 1022 spots available").
+    # Peak fill is an assumption from the Adam Hamadeh interview: Garage 1
+    # is effectively full for 8am-2pm arrivals. No reliable app readings yet:
+    # its counter appeared stuck on 2026-11-18.
+    "garage_1": FacilityProfile(
+        capacity=1022, early_fill=0.35, peak_fill=0.99, peak_reached=time(9, 45),
+        afternoon_fill=0.70, dismissal_release=0.04, noise=0.01,
+    ),
+    # Capacity is FAU's published design capacity (1,030 across five levels);
+    # confirm the total the app shows, which may cover blue floors only.
+    # Fill is calibrated on the 2026-11-18 readings: 398 available at 10:23
+    # falling to 370 at 11:04 (about 62-64% occupied, filling slowly). That
+    # morning showed no clear dip after 10:50, so the dismissal release is small.
+    "garage_2": FacilityProfile(
+        capacity=1030, early_fill=0.25, peak_fill=0.65, peak_reached=time(11, 30),
+        afternoon_fill=0.45, dismissal_release=0.02, noise=0.008,
+    ),
+}
+
+# Class change times. PLACEHOLDER until the Registrar schedule is loaded
+# (Q-3, build step 2); replace with real dismissal times then.
+DISMISSAL_TIMES = {
+    "MWF": (time(8, 50), time(9, 50), time(10, 50), time(11, 50), time(12, 50), time(13, 50)),
+    "TR": (time(9, 20), time(10, 50), time(12, 20), time(13, 50)),
+}
+DISMISSAL_REFILL_MINUTES = 25  # how long a class-change dip takes to refill
+# Interview (A-1): most people leave by 4-5pm, so occupancy eases after 1pm.
+AFTERNOON_DECLINE_START = time(13, 0)
+
+SYNTHETIC_INTERVAL_MINUTES = 10
+SYNTHETIC_GENERATOR_VERSION = "v1"
+
 
 # --- Runtime settings --------------------------------------------------------
 

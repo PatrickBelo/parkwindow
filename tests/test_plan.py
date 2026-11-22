@@ -42,6 +42,10 @@ def test_fr05_each_turnover_flag_names_a_dismissal_in_prior_15_minutes() -> None
 def test_forecasts_are_saved_as_draft_model_version() -> None: ...
 
 
+@step(3)
+def test_fr13_forecast_excludes_stuck_counter_readings() -> None: ...
+
+
 @step(4)
 def test_fr06_recommendation_matches_hand_calculation_within_5_minutes() -> None: ...
 

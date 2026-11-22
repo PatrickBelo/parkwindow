@@ -43,7 +43,7 @@ def test_occupancy_record_rejects_impossible_counts(occupied: int, capacity: int
 def test_forecast_rejects_probability_outside_0_to_1(probability: float) -> None:
     with pytest.raises(ValueError):
         Forecast(
-            facility=Facility.GARAGE_3,
+            facility=Facility.GARAGE_2,
             weekday=1,
             slot_start=time(9, 30),
             probability=probability,

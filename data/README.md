@@ -10,13 +10,13 @@ ParkWindow uses only synthetic, public, or explicitly authorized data (NFR-12). 
 
 ## Hand-logging garage counts
 
-Copy `hand_logged/hand_log_template.csv` to `hand_logged/hand_log.csv` and add one row per reading.
+Add one row per reading to `hand_logged/hand_log.csv` (the template shows the columns). Check the file afterward with `python -m parkwindow.pipeline.quality`.
 
 | Column | Format | Example |
 | --- | --- | --- |
 | `date` | YYYY-MM-DD | 2026-11-18 |
 | `time` | HH:MM, 24-hour | 08:40 |
-| `facility` | `garage_1` or `garage_3` | garage_1 |
+| `facility` | `garage_1` or `garage_2` | garage_1 |
 | `available` | Spaces shown in the app | 112 |
 | `total` | Total spaces shown in the app | 1022 |
 | `notes` | Optional | rain; exam week |
